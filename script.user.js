@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WebSocket Data Viewer
 // @namespace    https://github.com/Lemons1337/WebSocket-Data-Viewer
-// @version      0.1
+// @version      0.1.1
 // @description  try to take over the world!
 // @author       Lemons
 // @match        *://*/*
@@ -13,7 +13,7 @@ var send = WebSocket.prototype.send;
 
 window.WebSocket = new Proxy(WebSocket, {
     construct(target, args) {
-        var ws = new target(...args);
+        var ws = window.wsHook = new target(...args);
 
         ws.addEventListener('message', function(message) {
             var data = message.data;
@@ -31,7 +31,7 @@ window.WebSocket = new Proxy(WebSocket, {
     }
 });
 
-WebSocket.prototype.send = new Proxy(function(data) {
+WebSocket.prototype.send = function(data) {
 
     if (data instanceof DataView) {
         data = new Uint8Array(data.buffer);
@@ -42,4 +42,4 @@ WebSocket.prototype.send = new Proxy(function(data) {
     console.log('Outgoing ->', data);
 
     return send.apply(this, arguments);
-}, {});
+}

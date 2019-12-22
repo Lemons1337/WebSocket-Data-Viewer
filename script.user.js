@@ -32,9 +32,7 @@ window.WebSocket = new Proxy(WebSocket, {
 
         ws.addEventListener('message', function(message) {
             var data = message.data;
-
             data = parseData(data);
-
             console.log('Incoming ->', data);
         });
 
@@ -44,9 +42,10 @@ window.WebSocket = new Proxy(WebSocket, {
 
 WebSocket.prototype.send = function(data) {
 
-    data = parseData(data);
+    var res = send.apply(this, arguments);
 
+    data = parseData(data);
     console.log('Outgoing ->', data);
 
-    return send.apply(this, arguments);
+    return res;
 }

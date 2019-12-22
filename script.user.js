@@ -11,6 +11,21 @@
 
 var send = WebSocket.prototype.send;
 
+function parseData(data) {
+
+    if (data instanceof DataView) {
+        data = new Uint8Array(data.buffer);
+    } else if (data instanceof ArrayBuffer) {
+        data = new Uint8Array(data);
+    } else {
+        try {
+            data = JSON.parse(data);
+        } catch(err) {}
+    }
+
+    return data;
+}
+
 window.WebSocket = new Proxy(WebSocket, {
     construct(target, args) {
         var ws = window.wsHook = new target(...args);
@@ -18,11 +33,7 @@ window.WebSocket = new Proxy(WebSocket, {
         ws.addEventListener('message', function(message) {
             var data = message.data;
 
-            if (data instanceof DataView) {
-                data = new Uint8Array(data.buffer);
-            } else if (data instanceof ArrayBuffer) {
-                data = new Uint8Array(data);
-            }
+            data = parseData(data);
 
             console.log('Incoming ->', data);
         });
@@ -33,11 +44,7 @@ window.WebSocket = new Proxy(WebSocket, {
 
 WebSocket.prototype.send = function(data) {
 
-    if (data instanceof DataView) {
-        data = new Uint8Array(data.buffer);
-    } else if (data instanceof ArrayBuffer) {
-        data = new Uint8Array(data);
-    }
+    data = parseData(data);
 
     console.log('Outgoing ->', data);
 

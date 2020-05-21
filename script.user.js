@@ -7,12 +7,10 @@
 // @match        *://*/*
 // @run-at       document-start
 // @require      https://cdnjs.cloudflare.com/ajax/libs/msgpack-lite/0.1.26/msgpack.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/js-bson/2.0.8/bson.min.js
 // @grant        none
 // ==/UserScript==
 
 window.msgpack = msgpack;
-window.BSON = BSON;
 
 window.wsData = {};
 

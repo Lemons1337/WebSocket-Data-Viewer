@@ -30,11 +30,6 @@ function parseData(data) {
         data = msgpack.decode(data);
     } catch (err) {}
 
-    try {
-        var bson = new BSON();
-        data = bson.deserialize(data);
-    } catch (err) {}
-
     return data;
 }
 
